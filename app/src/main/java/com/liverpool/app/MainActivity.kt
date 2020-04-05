@@ -8,12 +8,15 @@ import android.os.Bundle
 import android.provider.SearchRecentSuggestions
 import android.util.Log
 import android.view.Menu
+import android.widget.Button
 import android.widget.ListView
 import android.widget.SearchView
+import android.widget.Toast
 import com.liverpool.app.adapters.ProductsAdapter
 import com.liverpool.app.model.ProductsResponse
 import com.liverpool.app.model.RecordsResponse
 import com.liverpool.app.service.APIService
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -34,8 +37,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         listOfProducts = findViewById(R.id.products_list_view)
-
         handleIntent(this.intent)
+
+        btn_cleanSuggestions.setOnClickListener(){
+            deleteSuggestions()
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -100,6 +106,12 @@ class MainActivity : AppCompatActivity() {
         alert("Ha ocurrido un error, inténtelo nuevamente.") {
             yesButton { }
         }.show()
+    }
+
+    public fun deleteSuggestions(){
+        SearchRecentSuggestions(this, MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE)
+            .clearHistory()
+        Toast.makeText(this,"¡Sugerencias Limpias!",Toast.LENGTH_LONG).show()
     }
 
 

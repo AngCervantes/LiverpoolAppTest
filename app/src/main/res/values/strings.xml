@@ -5,4 +5,5 @@
     <string name="productTitleDefault">Title</string>
     <string name="priceTitleDefault">0.0</string>
     <string name="locationTitleDefault">Location</string>
+    <string name="btnTitleCleartSuggestions">Limpia Sugerencias</string>
 </resources>
