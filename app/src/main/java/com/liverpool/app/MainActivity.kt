@@ -8,8 +8,11 @@ import android.os.Bundle
 import android.provider.SearchRecentSuggestions
 import android.util.Log
 import android.view.Menu
+import android.widget.ListView
 import android.widget.SearchView
+import com.liverpool.app.adapters.ProductsAdapter
 import com.liverpool.app.model.ProductsResponse
+import com.liverpool.app.model.RecordsResponse
 import com.liverpool.app.service.APIService
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
@@ -19,16 +22,19 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG: String = "MainActivity"
+    private val TAG: String = "MainActivity"
 
-    val numberOfPage: Int = 1
-    val numberOfItems: Int = 10
-    val baseURL: String = "https://shoppapp.liverpool.com.mx/appclienteservices/services/v3/plp/"
+    private val numberOfPage: Int = 1
+    private val numberOfItems: Int = 10
+    private val baseURL: String = "https://shoppapp.liverpool.com.mx/appclienteservices/services/v3/plp/"
 
+    private lateinit var listOfProducts: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        listOfProducts = findViewById(R.id.products_list_view)
+
         handleIntent(this.intent)
     }
 
@@ -55,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 MySuggestionProvider.AUTHORITY,
                 MySuggestionProvider.MODE
             ).saveRecentQuery(criteria, null)
-            //-- searchByName(criteria)
+            searchByName(criteria)
         }
     }
 
@@ -68,12 +74,19 @@ class MainActivity : AppCompatActivity() {
             uiThread {
                 if (products.status.status == "OK") {
                     Log.d(TAG, ">> Everything it's Ok")
+                    //-- Fill the interface
+                    fillTheproductsList(products.plpResults.records)
                 } else {
                     Log.d(TAG, ">> An Error has occurred while consulting the api")
                     showErrorDialog();
                 }
             }
         }
+    }
+
+    private fun fillTheproductsList(records: ArrayList<RecordsResponse>) {
+        val adapter = ProductsAdapter(this, records)
+        listOfProducts.adapter = adapter
     }
 
     private fun getRetrofit(): Retrofit {

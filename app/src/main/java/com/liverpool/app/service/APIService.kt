@@ -8,7 +8,4 @@ import retrofit2.http.Url
 interface APIService {
     @GET
     fun getProductsByName(@Url url: String): Call<ProductsResponse>
-
-    @GET
-    fun getAnimals(@Url url: String): Call<DogResponse>
 }

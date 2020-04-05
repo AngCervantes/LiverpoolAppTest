@@ -2,4 +2,7 @@
     <string name="app_name">LiverpoolApp</string>
     <string name="search_title">Busca tu producto</string>
     <string name="search_hint">Producto</string>
+    <string name="productTitleDefault">Title</string>
+    <string name="priceTitleDefault">0.0</string>
+    <string name="locationTitleDefault">Location</string>
 </resources>
